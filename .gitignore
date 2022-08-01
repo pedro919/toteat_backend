@@ -1,1 +1,4 @@
 .env
+toteat_api/__pycache__/
+toteat_api/migrations/__pycache__/
+toteat_project/__pycache__/
