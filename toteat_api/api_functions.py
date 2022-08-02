@@ -89,7 +89,7 @@ def analyse_monthly_sales(date, monthly_sales):
         products_list.append(category_dict)
 
         
-    response_json['zones_count'] = zones_list
+    response_json['zones'] = zones_list
     response_json['total_income'] = total_income
     response_json['total_clients'] = total_clients
     response_json['income_per_client'] = total_income/total_clients
