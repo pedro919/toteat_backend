@@ -62,23 +62,41 @@ def analyse_monthly_sales(date, monthly_sales):
         total_income += sale['total']
         total_clients += sale['diners']
         total_time += (sale['date_closed'] - sale['date_opened']).total_seconds() / 60
+
+    zones_list = []
+    for zone in zones_count:
+        zone_dict = {'name': zone, 'count': zones_count[zone], 'income': zones_income[zone]}
+        zones_list.append(zone_dict)
     
-    payment_list = []
+    payments_list = []
     for payment_method in payments_count:
         payments_method_dict = {'name': payment_method, 'count': payments_count[payment_method], 'income': payments_income[payment_method]}
-        payment_list.append(payments_method_dict)
+        payments_list.append(payments_method_dict)
+    
+    categories_list = []
+    for category in categories_count:
+        category_dict = {'name': category, 'count': categories_count[category], 'income': categories_income[category]}
+        categories_list.append(category_dict)
+    
+    products_list = []
+    for category in products_by_category_count:
+        category_dict = {'name': category}
+        list_of_products_in_category = []
+        for product in products_by_category_count[category]:
+            product_dict = {'name': product, 'count': products_by_category_count[category][product], 'income': products_by_category_income[category][product]}
+            list_of_products_in_category.append(product_dict)
+        category_dict['products'] = list_of_products_in_category
+        products_list.append(category_dict)
+
         
-    response_json['zones_count'] = zones_count
-    response_json['zones_income'] = zones_income
+    response_json['zones_count'] = zones_list
     response_json['total_income'] = total_income
     response_json['total_clients'] = total_clients
     response_json['income_per_client'] = total_income/total_clients
     response_json['average_time_in_restaurant'] = total_time / len(monthly_sales)
-    response_json['payments_count'] = payment_list
-    response_json['categories_count'] = categories_count
-    response_json['categories_income'] = categories_income
-    response_json['products_count'] = products_by_category_count
-    response_json['product_income'] = products_by_category_income
+    response_json['payments'] = payments_list
+    response_json['categories'] = categories_list
+    response_json['all_products'] = products_list
 
     return response_json
 
