@@ -62,6 +62,11 @@ def analyse_monthly_sales(date, monthly_sales):
         total_income += sale['total']
         total_clients += sale['diners']
         total_time += (sale['date_closed'] - sale['date_opened']).total_seconds() / 60
+    
+    payment_list = []
+    for payment_method in payments_count:
+        payments_method_dict = {'name': payment_method, 'count': payments_count[payment_method]}
+        payment_list.append(payments_method_dict)
         
     response_json['zones_count'] = zones_count
     response_json['zones_income'] = zones_income
@@ -69,7 +74,7 @@ def analyse_monthly_sales(date, monthly_sales):
     response_json['total_clients'] = total_clients
     response_json['income_per_client'] = total_income/total_clients
     response_json['average_time_in_restaurant'] = total_time / len(monthly_sales)
-    response_json['payments_count'] = payments_count
+    response_json['payments_count'] = payment_list
     response_json['payments_income'] = payments_income
     response_json['categories_count'] = categories_count
     response_json['categories_income'] = categories_income
