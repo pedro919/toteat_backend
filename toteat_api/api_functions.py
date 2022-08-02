@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from urllib import response
 
 def last_day_of_month(any_day):
     next_month = any_day.replace(day=28) + timedelta(days=4)
@@ -151,4 +152,38 @@ def analyze_cashier_sales(sales):
         person_dictionary['total_attended_clients'] = cashier_attended_clientes[person]
         response_json.append(person_dictionary)
 
+    return response_json
+
+def analyze_products(sales):
+    response_json = {}
+    categories = set()
+    products_by_category_count = {}
+    products_by_category_income = {}
+    for sale in sales:
+        for product in sale['products']:
+            total_product_income =  int(product['price']) * int(product['quantity'])
+            if product['category'] in categories:                
+                if product['name'] in products_by_category_count[product['category']]:
+                    products_by_category_count[product['category']][product['name']] += int(product['quantity'])                    
+                    products_by_category_income[product['category']][product['name']] += total_product_income
+                else:
+                    products_by_category_count[product['category']][product['name']] = int(product['quantity'])
+                    products_by_category_income[product['category']][product['name']] = total_product_income
+
+            else:
+                categories.add(product['category'])
+                products_by_category_count[product['category']] = {product['name']: int(product['quantity'])}
+                products_by_category_income[product['category']] = {product['name']: total_product_income}
+    
+    products_list = []
+    for category in products_by_category_count:
+        category_dict = {'name': category}
+        list_of_products_in_category = []
+        for product in products_by_category_count[category]:
+            product_dict = {'name': product, 'count': products_by_category_count[category][product], 'income': products_by_category_income[category][product]}
+            list_of_products_in_category.append(product_dict)
+        category_dict['products'] = list_of_products_in_category
+        products_list.append(category_dict)
+    
+    response_json['all_products'] = products_list
     return response_json

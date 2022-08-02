@@ -2,7 +2,7 @@ from ninja import NinjaAPI
 import json
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-from .api_functions import months_betweeen_to_dates, analyse_monthly_sales, analyze_waiter_sales, analyze_cashier_sales
+from .api_functions import months_betweeen_to_dates, analyse_monthly_sales, analyze_waiter_sales, analyze_cashier_sales, analyze_products
 
 api = NinjaAPI()
 
@@ -77,4 +77,26 @@ def calculate_monthly_sales_by_cashier(request):
         response.append({'date': f'{actual_date.strftime("%m-%Y")}', 'cashiers_sales': monthly_sales_response})
         actual_date = actual_date + relativedelta(months=1)
 
+    return response
+
+
+@api.get("/monthly_sales_by_product")
+def calculate_monthly_sales_for_each_product(request):
+    response = []
+    start_date = sorted_data[0]['date_closed'].date()
+    end_date = sorted_data[-1]['date_closed'].date()
+    number_of_months = months_betweeen_to_dates(start_date, end_date)
+    actual_date = start_date.replace(day=1)
+    for i in range(number_of_months):
+        monthly_sales = list(filter(lambda x: (x['date_closed'].month == actual_date.month) and (x['date_closed'].year == actual_date.year), sorted_data))
+        monthly_sales_response = analyze_products(monthly_sales)
+        response.append({'date': f'{actual_date.strftime("%m-%Y")}', 'cashiers_sales': monthly_sales_response})
+        actual_date = actual_date + relativedelta(months=1)
+
+    return response
+
+
+@api.get("/products_sales")
+def calculate_monthly_sales_for_each_product(request):
+    response = analyze_products(sorted_data)
     return response
