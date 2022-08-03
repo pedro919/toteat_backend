@@ -90,7 +90,7 @@ def calculate_monthly_sales_for_each_product(request):
     for i in range(number_of_months):
         monthly_sales = list(filter(lambda x: (x['date_closed'].month == actual_date.month) and (x['date_closed'].year == actual_date.year), sorted_data))
         monthly_sales_response = analyze_products(monthly_sales)
-        response.append({'date': f'{actual_date.strftime("%m-%Y")}', 'cashiers_sales': monthly_sales_response})
+        response.append({'date': f'{actual_date.strftime("%m-%Y")}', 'monthly_sales': monthly_sales_response})
         actual_date = actual_date + relativedelta(months=1)
 
     return response
