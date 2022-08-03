@@ -102,3 +102,8 @@ def calculate_monthly_sales_for_each_product(request):
 def calculate_total_sales(request):
     response = analyze_sales(sorted_data)
     return response
+
+
+@api.get("/all_orders")
+def retrieve_all_orders(request):
+    return sorted_data
