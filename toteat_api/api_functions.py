@@ -11,7 +11,7 @@ def months_betweeen_to_dates(from_date, to_date):
     else:
         return 12*(to_date.year - from_date.year) - to_date.month + from_date.month + 1
 
-def analyse_monthly_sales(monthly_sales):
+def analyze_sales(monthly_sales):
     response_json = {}
     zones_count = {}
     zones_income = {}
